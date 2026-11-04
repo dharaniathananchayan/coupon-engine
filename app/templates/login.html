@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Staff Login — ArchintX Coupon Engine{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto px-4 py-12 sm:py-16">
+    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="w-12 h-12 mx-auto rounded-xl bg-slate-900 flex items-center justify-center text-white mb-3 shadow-md">
+                <i class="fa-solid fa-user-shield text-xl text-sky-400"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-900">ArchintX Staff Portal</h2>
+            <p class="text-xs text-slate-500 mt-1">Authorized personnel login to manage coupons & redemptions</p>
+        </div>
+
+        <!-- Error Notification -->
+        <div id="loginErrorAlert" class="hidden mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-sm flex items-start space-x-3">
+            <i class="fa-solid fa-circle-exclamation mt-0.5 text-rose-500 flex-shrink-0"></i>
+            <div>
+                <span class="font-semibold block" id="loginErrorTitle">Authentication Failed</span>
+                <span id="loginErrorText" class="text-xs text-rose-700">Invalid email or password.</span>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <form id="loginForm" class="space-y-5">
+            <div>
+                <label for="email" class="block text-sm font-semibold text-slate-700 mb-1.5">Staff Email</label>
+                <div class="relative rounded-xl shadow-sm">
+                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="staff@archintx.com"
+                        required
+                        placeholder="staff@archintx.com"
+                        class="block w-full rounded-xl border border-slate-300 pl-10 pr-4 py-2.5 text-slate-900 placeholder-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none text-sm transition"
+                    />
+                </div>
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+                <div class="relative rounded-xl shadow-sm">
+                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                        <i class="fa-solid fa-key"></i>
+                    </div>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        value="Password123!"
+                        required
+                        placeholder="••••••••••••"
+                        class="block w-full rounded-xl border border-slate-300 pl-10 pr-4 py-2.5 text-slate-900 placeholder-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none text-sm transition"
+                    />
+                </div>
+            </div>
+
+            <button
+                type="submit"
+                id="loginSubmitBtn"
+                class="w-full inline-flex items-center justify-center py-3 px-4 rounded-xl shadow-md text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900/40 transition-all disabled:opacity-50"
+            >
+                <span id="loginBtnText"><i class="fa-solid fa-right-to-bracket mr-2"></i> Sign In to Dashboard</span>
+                <span id="loginBtnSpinner" class="hidden"><i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Verifying...</span>
+            </button>
+        </form>
+
+        <!-- Test credentials hint -->
+        <div class="mt-6 pt-5 border-t border-slate-100 text-xs text-slate-500">
+            <span class="font-semibold text-slate-700 block mb-1">Pre-seeded Test Credentials:</span>
+            <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200 font-mono text-[11px] space-y-0.5">
+                <div>Email: <span class="text-slate-800 font-bold">staff@archintx.com</span></div>
+                <div>Pass:  <span class="text-slate-800 font-bold">Password123!</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const loginForm = document.getElementById('loginForm');
+    const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+    const loginBtnText = document.getElementById('loginBtnText');
+    const loginBtnSpinner = document.getElementById('loginBtnSpinner');
+    const loginErrorAlert = document.getElementById('loginErrorAlert');
+    const loginErrorText = document.getElementById('loginErrorText');
+
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+
+        loginSubmitBtn.disabled = true;
+        loginBtnText.classList.add('hidden');
+        loginBtnSpinner.classList.remove('hidden');
+        loginErrorAlert.classList.add('hidden');
+
+        try {
+            const res = await fetch('/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                // Login successful, redirect to dashboard
+                window.location.href = '/dashboard';
+            } else {
+                // Real backend error
+                loginErrorAlert.classList.remove('hidden');
+                loginErrorText.innerText = data.detail || 'Invalid email or password.';
+            }
+        } catch (err) {
+            loginErrorAlert.classList.remove('hidden');
+            loginErrorText.innerText = 'Network error: could not connect to server.';
+        } finally {
+            loginSubmitBtn.disabled = false;
+            loginBtnText.classList.remove('hidden');
+            loginBtnSpinner.classList.add('hidden');
+        }
+    });
+</script>
+{% endblock %}

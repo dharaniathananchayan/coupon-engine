@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: archintx-coupon-engine
+    runtime: python
+    buildCommand: pip install -r requirements.txt && python -m scripts.seed
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: ENVIRONMENT
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: archintx-db
+          property: connectionString
+
+databases:
+  - name: archintx-db
+    databaseName: coupon_engine
+    user: archintx_user
+    plan: free
