@@ -168,5 +168,5 @@ def apply_coupon(db: Session, raw_code: str, base_price: float) -> ApplyCouponRe
         discount_percent=discount_percent,
         discounted_price=discounted_price,
         savings=savings,
-        message=f"Coupon '{coupon_code}' successfully applied! You saved ${savings:.2f} ({discount_percent}% off)",
+        message=f"Coupon '{coupon_code}' successfully applied! You saved ₹{savings:.2f} ({discount_percent}% off)",
     )

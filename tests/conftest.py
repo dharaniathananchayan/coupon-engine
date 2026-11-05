@@ -29,7 +29,7 @@ def setup_test_db():
 
     # Staff
     staff = Staff(
-        email="staff@archintx.com",
+        email="staff@couponengine.com",
         password_hash=hash_password("Password123!"),
         created_at=now,
     )
@@ -105,7 +105,7 @@ def client():
 def auth_headers(client):
     response = client.post(
         "/auth/login",
-        json={"email": "staff@archintx.com", "password": "Password123!"},
+        json={"email": "staff@couponengine.com", "password": "Password123!"},
     )
     assert response.status_code == 200
     token = response.json()["access_token"]

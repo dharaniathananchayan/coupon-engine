@@ -17,7 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="ArchintX Coupon Engine",
+    title="Coupon Engine",
     description="Full-stack coupon system with server-side validation, atomic concurrency control, and staff management.",
     version="1.0.0",
 )

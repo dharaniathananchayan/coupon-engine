@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Apply Coupon — ArchintX Coupon Engine{% endblock %}
+{% block title %}Apply Coupon — Coupon Engine{% endblock %}
 
 {% block content %}
 <div class="max-w-4xl mx-auto px-4 py-8 sm:py-12">
@@ -13,7 +13,7 @@
             Apply a Coupon against your Order
         </h1>
         <p class="mt-2 text-slate-600 text-sm sm:text-base">
-            Test any ArchintX coupon code against your base order amount. Real-time validation checks status, expiration, and usage limits directly on the backend.
+            Test any promotional coupon code against your base order amount. Real-time validation checks status, expiration, and usage limits directly on the backend.
         </p>
     </div>
 
@@ -24,11 +24,11 @@
                 <!-- Base Price Input -->
                 <div>
                     <label for="basePrice" class="block text-sm font-semibold text-slate-700 mb-1.5">
-                        Base Order Price ($) <span class="text-rose-500">*</span>
+                        Base Order Price (₹) <span class="text-rose-500">*</span>
                     </label>
                     <div class="relative rounded-xl shadow-sm">
                         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
-                            <i class="fa-solid fa-dollar-sign"></i>
+                            <i class="fa-solid fa-indian-rupee-sign"></i>
                         </div>
                         <input
                             type="number"
@@ -36,13 +36,13 @@
                             name="base_price"
                             step="0.01"
                             min="0.01"
-                            value="100.00"
+                            value="500.00"
                             required
-                            placeholder="e.g. 100.00"
+                            placeholder="e.g. 500.00"
                             class="block w-full rounded-xl border border-slate-300 pl-10 pr-4 py-3 text-slate-900 placeholder-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none text-base transition sm:text-sm font-medium"
                         />
                     </div>
-                    <p class="mt-1 text-xs text-slate-500">The total amount before applying any promotion.</p>
+                    <p class="mt-1 text-xs text-slate-500">The total amount in ₹ before applying any promotion.</p>
                 </div>
 
                 <!-- Coupon Code Input -->
@@ -59,7 +59,7 @@
                             id="couponCode"
                             name="code"
                             required
-                            placeholder="e.g. MARKETINGINTX26"
+                            placeholder="e.g. MARKETING26"
                             class="block w-full rounded-xl border border-slate-300 pl-10 pr-4 py-3 text-slate-900 uppercase font-mono tracking-wider placeholder:font-sans placeholder-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none text-base transition sm:text-sm"
                             autocomplete="off"
                         />
@@ -74,8 +74,8 @@
                         <span class="text-[11px] font-normal text-slate-400">Click to fill</span>
                     </p>
                     <div class="flex flex-wrap gap-2">
-                        <button type="button" onclick="setPreset('MARKETINGINTX26')" class="inline-flex items-center text-xs px-2.5 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 font-mono font-medium transition">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span> MARKETINGINTX26 (Active)
+                        <button type="button" onclick="setPreset('MARKETING26')" class="inline-flex items-center text-xs px-2.5 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 font-mono font-medium transition">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span> MARKETING26 (Active)
                         </button>
                         <button type="button" onclick="setPreset('ACTIVE20')" class="inline-flex items-center text-xs px-2.5 py-1.5 rounded-lg bg-sky-50 text-sky-700 border border-sky-200 hover:bg-sky-100 font-mono font-medium transition">
                             <span class="w-1.5 h-1.5 rounded-full bg-sky-500 mr-1.5"></span> ACTIVE20 (Active)
@@ -233,9 +233,9 @@
                 // Success
                 document.getElementById('resDiscountBadge').innerText = `${data.discount_percent}% OFF`;
                 document.getElementById('resMessage').innerText = data.message;
-                document.getElementById('resOriginalPrice').innerText = `$${data.base_price.toFixed(2)}`;
-                document.getElementById('resSavings').innerText = `-$${data.savings.toFixed(2)}`;
-                document.getElementById('resDiscountedPrice').innerText = `$${data.discounted_price.toFixed(2)}`;
+                document.getElementById('resOriginalPrice').innerText = `₹${data.base_price.toFixed(2)}`;
+                document.getElementById('resSavings').innerText = `-₹${data.savings.toFixed(2)}`;
+                document.getElementById('resDiscountedPrice').innerText = `₹${data.discounted_price.toFixed(2)}`;
                 successCard.classList.remove('hidden');
             } else {
                 // Backend returned 400, 404, etc.

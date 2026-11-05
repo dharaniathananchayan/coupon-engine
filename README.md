@@ -1,17 +1,17 @@
-# ArchintX Coupon Engine 🎫
+# Coupon Engine 🎫
 
 [![Python Version](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0+-red.svg)](https://www.sqlalchemy.org/)
 [![Tests](https://img.shields.io/badge/pytest-12%20passed-brightgreen.svg)](https://docs.pytest.org/)
 
-An advanced, full-stack coupon management and validation engine built for **ArchintX**. The system allows public users to validate and redeem coupon codes against base prices with strict server-side validation rules and race-condition safety, while providing ArchintX staff with a secure management dashboard.
+An advanced, full-stack coupon management and validation engine. The system allows public users to validate and redeem coupon codes against base prices with strict server-side validation rules and race-condition safety, while providing staff with a secure management dashboard.
 
 ---
 
 ## 🌟 Key Features
 
-- **Public Apply Coupon Portal**: Real-time coupon application with instant savings breakdown (original price, discount %, discounted price, total savings).
+- **Public Apply Coupon Portal**: Real-time coupon application with instant savings breakdown in Rupees (original price, discount %, discounted price, total savings).
 - **Enforced Server-Side Rule Pipeline**: All validation rules (code existence, active status, expiration timestamp, usage limits) are strictly executed on the backend in sequence.
 - **Race-Condition & Concurrency Safe**: Uses atomic conditional database updates (`UPDATE coupons SET used_count = used_count + 1 WHERE ... AND used_count < usage_limit`) to guarantee usage limits hold even under high-concurrency bursts.
 - **Staff Portal & Management Dashboard**:
@@ -53,8 +53,8 @@ erDiagram
     REDEMPTION {
         string id PK "UUID (String 36)"
         string coupon_id FK "FK -> coupons.id"
-        float base_price "Check: >= 0"
-        float discounted_price "Check: >= 0"
+        float base_price "Check: >= 0 (in Rupees)"
+        float discounted_price "Check: >= 0 (in Rupees)"
         datetime redeemed_at "UTC Timestamp"
     }
 
@@ -64,7 +64,7 @@ erDiagram
 ### Table Definitions
 
 #### 1. `staff`
-Stores authorized ArchintX staff accounts. No public registration is permitted; accounts are seeded directly.
+Stores authorized staff accounts. No public registration is permitted; accounts are seeded directly.
 - `id` (`VARCHAR(36)`): UUID Primary Key.
 - `email` (`VARCHAR(255)`): Unique, indexed staff email.
 - `password_hash` (`VARCHAR(255)`): Salted bcrypt password hash (never plain text).
@@ -73,7 +73,7 @@ Stores authorized ArchintX staff accounts. No public registration is permitted; 
 #### 2. `coupons`
 Defines coupon rules, discounts, and tracking state.
 - `id` (`VARCHAR(36)`): UUID Primary Key.
-- `code` (`VARCHAR(50)`): Unique, indexed promo code (e.g., `MARKETINGINTX26`).
+- `code` (`VARCHAR(50)`): Unique, indexed promo code (e.g., `MARKETING26`).
 - `discount_percent` (`FLOAT`): Percentage discount between 0.1% and 100%.
 - `expiry_date` (`DATETIME`): UTC expiration deadline.
 - `usage_limit` (`INTEGER`): Maximum allowable redemptions across all users.
@@ -85,8 +85,8 @@ Defines coupon rules, discounts, and tracking state.
 Historical ledger recording every successful coupon redemption.
 - `id` (`VARCHAR(36)`): UUID Primary Key.
 - `coupon_id` (`VARCHAR(36)`): Foreign key referencing `coupons.id`.
-- `base_price` (`FLOAT`): Original order amount.
-- `discounted_price` (`FLOAT`): Final payable amount after discount.
+- `base_price` (`FLOAT`): Original order amount in Rupees (₹).
+- `discounted_price` (`FLOAT`): Final payable amount after discount in Rupees (₹).
 - `redeemed_at` (`DATETIME`): UTC timestamp when the redemption transaction committed.
 
 ---
@@ -104,7 +104,7 @@ if coupon.used_count < coupon.usage_limit:
 ```
 If 10 requests hit the endpoint simultaneously when `usage_limit = 5` and `used_count = 4`, all 10 threads read `used_count == 4`, pass the check, and increment `used_count`, allowing the limit to be exceeded.
 
-### The ArchintX Solution: Atomic Conditional SQL Updates
+### The Solution: Atomic Conditional SQL Updates
 Our implementation performs **atomic conditional updates directly inside the database engine**:
 
 ```sql
@@ -158,7 +158,7 @@ cp .env.example .env
 Default `.env` settings:
 ```ini
 ENVIRONMENT=development
-SECRET_KEY=archintx_super_secret_jwt_key_change_in_production_2026
+SECRET_KEY=coupon_engine_super_secret_jwt_key_2026
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=1440
 DATABASE_URL=sqlite:///./coupon_engine.db
@@ -187,12 +187,12 @@ Open your browser at:
 ### Staff Credentials
 | Email | Password | Role |
 | :--- | :--- | :--- |
-| `staff@archintx.com` | `Password123!` | ArchintX Staff Administrator |
+| `staff@couponengine.com` | `Password123!` | Staff Administrator |
 
 ### Pre-Seeded Coupon Test Matrix
 | Code | Discount | Expiry | Limit | Initial Used | State / Test Purpose |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **`MARKETINGINTX26`**| 25% | +60 days | 200 | 0 | **Active & usable** (Brand showcase) |
+| **`MARKETING26`** | 25% | +60 days | 200 | 0 | **Active & usable** (Promo code) |
 | **`ACTIVE20`** | 20% | +30 days | 50 | 2 | **Active & usable** |
 | **`EXPIRED10`** | 10% | -7 days | 100 | 5 | **Expired** (Rejection check) |
 | **`MAXED50`** | 50% | +30 days | 5 | 5 | **Usage Limit Reached** (Rejection check) |
@@ -232,7 +232,7 @@ tests/test_coupons.py::test_apply_maxed_coupon PASSED
 
 ### Authentication
 - `POST /auth/login`
-  - Body: `{"email": "staff@archintx.com", "password": "Password123!"}`
+  - Body: `{"email": "staff@couponengine.com", "password": "Password123!"}`
   - Returns: `{"access_token": "...", "token_type": "bearer", "staff_email": "..."}` and sets HTTP-only cookie.
 - `POST /auth/logout`
   - Clears authentication cookie.
@@ -250,17 +250,17 @@ tests/test_coupons.py::test_apply_maxed_coupon PASSED
 
 ### Coupon Application (Public)
 - `POST /coupons/{code}/apply`
-  - Body: `{"base_price": 100.00}`
+  - Body: `{"base_price": 500.00}`
   - Returns (200 OK):
     ```json
     {
       "valid": true,
       "code": "ACTIVE20",
-      "base_price": 100.0,
+      "base_price": 500.0,
       "discount_percent": 20.0,
-      "discounted_price": 80.0,
-      "savings": 20.0,
-      "message": "Coupon 'ACTIVE20' successfully applied! You saved $20.00 (20.0% off)"
+      "discounted_price": 400.0,
+      "savings": 100.0,
+      "message": "Coupon 'ACTIVE20' successfully applied! You saved ₹100.00 (20.0% off)"
     }
     ```
   - Returns (400 / 404 on Failure):
@@ -277,7 +277,7 @@ tests/test_coupons.py::test_apply_maxed_coupon PASSED
 ### Option 1: Deploy to Render (Recommended Free Tier)
 1. Push this repository to GitHub.
 2. Sign in to [Render](https://render.com).
-3. Click **New +** $\rightarrow$ **Blueprint** and select your GitHub repo (`render.yaml` will automatically configure a free Python Web Service and free PostgreSQL database).
+3. Click **New +** -> **Blueprint** and select your GitHub repo (`render.yaml` will automatically configure a free Python Web Service and free PostgreSQL database).
 4. Or create a **Web Service**:
    - Runtime: `Python`
    - Build Command: `pip install -r requirements.txt && python -m scripts.seed`
@@ -297,7 +297,7 @@ docker run -p 8000:8000 -e DATABASE_URL=sqlite:///./coupon_engine.db coupon-engi
 
 - [x] **Database Schema & ER Diagram** included in README.
 - [x] **Atomic Concurrency Strategy** explained and verified with test suite.
-- [x] **Validation Hierarchy** strictly enforced server-side (Existence $\rightarrow$ Active $\rightarrow$ Not Expired $\rightarrow$ Under Limit).
+- [x] **Validation Hierarchy** strictly enforced server-side (Existence -> Active -> Not Expired -> Under Limit).
 - [x] **5 Distinct Seed Coupons** + Staff Test User pre-seeded.
 - [x] **Responsive Desktop & Mobile UI** for Apply, Login, and Dashboard.
 - [x] **12 Automated Tests** passing with 100% success rate.

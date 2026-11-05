@@ -71,7 +71,7 @@ def test_apply_coupon_success(client, auth_headers):
         },
     )
 
-    # Apply against base price of $150.00
+    # Apply against base price of ₹150.00
     apply_res = client.post("/coupons/PROMO20/apply", json={"base_price": 150.0})
     assert apply_res.status_code == 200
     data = apply_res.json()

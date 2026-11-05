@@ -1,1 +1,1 @@
-# ArchintX Coupon Engine Package
+# Coupon Engine Package

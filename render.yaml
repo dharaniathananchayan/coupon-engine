@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: archintx-coupon-engine
+    name: promo-coupon-engine
     runtime: python
     buildCommand: pip install -r requirements.txt && python -m scripts.seed
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
@@ -13,11 +13,11 @@ services:
         generateValue: true
       - key: DATABASE_URL
         fromDatabase:
-          name: archintx-db
+          name: promo-db
           property: connectionString
 
 databases:
-  - name: archintx-db
-    databaseName: coupon_engine
-    user: archintx_user
+  - name: promo-db
+    databaseName: promo_coupon_engine
+    user: promo_user
     plan: free

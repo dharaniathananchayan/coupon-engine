@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     ENVIRONMENT: str = "development"
-    SECRET_KEY: str = "archintx_super_secret_jwt_key_change_in_production_2026"
+    SECRET_KEY: str = "coupon_engine_super_secret_jwt_key_2026"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
     DATABASE_URL: str = "sqlite:///./coupon_engine.db"

@@ -1,19 +1,19 @@
 def test_staff_login_success(client):
     response = client.post(
         "/auth/login",
-        json={"email": "staff@archintx.com", "password": "Password123!"},
+        json={"email": "staff@couponengine.com", "password": "Password123!"},
     )
     assert response.status_code == 200
     data = response.json()
     assert "access_token" in data
     assert data["token_type"] == "bearer"
-    assert data["staff_email"] == "staff@archintx.com"
+    assert data["staff_email"] == "staff@couponengine.com"
 
 
 def test_staff_login_wrong_password(client):
     response = client.post(
         "/auth/login",
-        json={"email": "staff@archintx.com", "password": "WrongPassword!"},
+        json={"email": "staff@couponengine.com", "password": "WrongPassword!"},
     )
     assert response.status_code == 401
     assert "Invalid email or password" in response.json()["detail"]
@@ -22,7 +22,7 @@ def test_staff_login_wrong_password(client):
 def test_staff_login_nonexistent_user(client):
     response = client.post(
         "/auth/login",
-        json={"email": "nonexistent@archintx.com", "password": "Password123!"},
+        json={"email": "nonexistent@couponengine.com", "password": "Password123!"},
     )
     assert response.status_code == 401
     assert "Invalid email or password" in response.json()["detail"]

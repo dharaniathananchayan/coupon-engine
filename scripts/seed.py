@@ -15,7 +15,7 @@ def seed_database():
         now = datetime.now(timezone.utc).replace(tzinfo=None)
 
         # 1. Seed Staff User
-        staff_email = "staff@archintx.com"
+        staff_email = "staff@couponengine.com"
         staff_password = "Password123!"
         existing_staff = db.query(Staff).filter(Staff.email == staff_email).first()
 
@@ -65,7 +65,7 @@ def seed_database():
                 "is_active": False,
             },
             {
-                "code": "MARKETINGINTX26",
+                "code": "MARKETING26",
                 "discount_percent": 25.0,
                 "expiry_date": now + timedelta(days=60),
                 "usage_limit": 200,
