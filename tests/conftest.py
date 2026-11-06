@@ -1,3 +1,4 @@
+import os
 import pytest
 from datetime import datetime, timedelta, timezone
 from fastapi.testclient import TestClient
@@ -84,6 +85,12 @@ def setup_test_db():
     yield
 
     Base.metadata.drop_all(bind=test_engine)
+    test_engine.dispose()
+    if os.path.exists("test_coupon_engine.db"):
+        try:
+            os.remove("test_coupon_engine.db")
+        except OSError:
+            pass
 
 
 @pytest.fixture
