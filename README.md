@@ -1,7 +1,7 @@
 # Coupon Engine 🎫
 
-[![Live Demo](https://img.shields.io/badge/Demo-Live%20Preview-success?style=for-the-badge&logo=render)](https://<YOUR-LIVE-DEPLOYMENT-URL>.onrender.com)
-[![API Docs](https://img.shields.io/badge/Swagger-API%20Docs-009688?style=for-the-badge&logo=fastapi)](https://<YOUR-LIVE-DEPLOYMENT-URL>.onrender.com/docs)
+[![Live Demo](https://img.shields.io/badge/Demo-Live%20Preview-success?style=for-the-badge&logo=render)](https://coupon-engine-ceyh.onrender.com)
+[![API Docs](https://img.shields.io/badge/Swagger-API%20Docs-009688?style=for-the-badge&logo=fastapi)](https://coupon-engine-ceyh.onrender.com/docs)
 [![Python Version](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0+-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white)](https://www.sqlalchemy.org/)
@@ -257,10 +257,9 @@ tests/test_coupons.py::test_apply_maxed_coupon PASSED                    [100%]
 
 ## 🌐 Live Deployment & Quick Links
 
-> [!TIP]
-> Once deployed to **Render**, **Railway**, or **Fly.io**, replace the `<YOUR-LIVE-DEPLOYMENT-URL>` placeholder below with your live production domain.
-
 | Resource | Live Link / Route | Description |
 | :--- | :--- | :--- |
-| 🚀 **Live Application** | `https://<YOUR-LIVE-DEPLOYMENT-URL>.onrender.com` | Root redirect to Public Apply Portal |
-| 📖 **Interactive Swagger Docs** | `https://<YOUR-LIVE-DEPLOYMENT-URL>.onrender.com/docs` | Live OpenAPI / Swagger interactive documentation |
+| 🚀 **Live Application** | [https://coupon-engine-ceyh.onrender.com](https://coupon-engine-ceyh.onrender.com) | Root redirect to Public Apply Portal |
+| 🎫 **Public Apply Portal** | [https://coupon-engine-ceyh.onrender.com/apply](https://coupon-engine-ceyh.onrender.com/apply) | Interactive coupon validation and redemption |
+| 🔐 **Staff Admin Login** | [https://coupon-engine-ceyh.onrender.com/login](https://coupon-engine-ceyh.onrender.com/login) | Administrator portal to manage & track coupons |
+| 📖 **Interactive Swagger Docs** | [https://coupon-engine-ceyh.onrender.com/docs](https://coupon-engine-ceyh.onrender.com/docs) | Live OpenAPI / Swagger interactive documentation |
